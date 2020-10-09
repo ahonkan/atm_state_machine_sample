@@ -1,3 +1,4 @@
+cmake_minimum_required(VERSION 3.10)
 set(TARGET_NAME hal)
 project(${TARGET_NAME} VERSION 1.0.0 LANGUAGES CXX)
 

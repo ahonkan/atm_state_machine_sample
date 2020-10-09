@@ -1,0 +1,41 @@
+# Set up CMake project to make gtest executable
+#
+include_directories(BEFORE
+    ${GTEST_INCDIR}
+    ${GMOCK_INCDIR}
+)     
+
+set(GTEST_LIBS
+  ${GTEST_LIBDIR}/libgtest.a
+  ${GTEST_LIBDIR}/libgtest_main.a
+)
+
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --coverage -g")
+SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} --coverage")
+
+if (NOT TARGET gcov)
+  add_custom_target(gcov
+    COMMAND mkdir -p coverage
+    COMMAND ${CMAKE_MAKE_PROGRAM} test
+    WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+  )
+  add_custom_command(TARGET gcov
+    COMMAND lcov -c --directory ./CMakeFiles/${TARGET_NAME}.dir/
+                 --output-file coverage.info
+    COMMAND genhtml coverage.info --output-directory coverage
+  )
+  add_dependencies(gcov ${TARGET_NAME})
+endif()
+
+find_package(Threads)
+include_directories(${INC_DIRS})
+link_directories(${LIB_DIRS})
+add_executable(${TARGET_NAME} ${SRCS})
+target_link_libraries(${TARGET_NAME} 
+  ${CMAKE_THREAD_LIBS_INIT}
+  ${LIBS}
+  ${GTEST_LIBS}
+)
+
+add_test(NAME ${TARGET_NAME} COMMAND ${TARGET_NAME})
+enable_testing()

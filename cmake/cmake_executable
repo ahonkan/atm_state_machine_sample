@@ -3,8 +3,8 @@
 set(TARGET_DEST ${TARGET_DIR}/usr/bin)  
 include_directories(${INC_DIRS})                                                
 link_directories(${LIB_DIRS})                                                   
-target_link_libraries(${TARGET_NAME} ${CMAKE_THREAD_LIBS_INIT} ${LIBS})         
 add_executable(${TARGET_NAME} ${SRCS})                                          
+target_link_libraries(${TARGET_NAME} ${CMAKE_THREAD_LIBS_INIT} ${LIBS})         
                                                                                 
 install(TARGETS ${TARGET_NAME} RUNTIME DESTINATION ${TARGET_DEST})           
 
