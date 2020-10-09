@@ -1,0 +1,13 @@
+# Set up CMake project to create shared lib
+#
+set(TARGET_DEST ${TARGET_DIR}/usr/lib)   
+set(TARGET_INC_DEST ${TARGET_DIR}/usr/include/${TARGET_NAME})
+                                       
+include_directories(${INC_DIRS})                                                
+target_link_libraries(${TARGET_NAME} ${CMAKE_THREAD_LIBS_INIT} ${LIBS})         
+add_library(${TARGET_NAME} SHARED ${SRCS} ${INCS})                               
+                                                                                
+set_target_properties(${TARGET_NAME} PROPERTIES VERSION ${PROJECT_VERSION})     
+set_target_properties(${TARGET_NAME} PROPERTIES SOVERSION 0)                    
+install(TARGETS ${TARGET_NAME} LIBRARY DESTINATION ${TARGET_DEST})   
+install(FILES ${EXPORT} DESTINATION ${TARGET_INC_DEST})  

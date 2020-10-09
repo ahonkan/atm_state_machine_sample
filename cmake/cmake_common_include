@@ -1,0 +1,19 @@
+set(PROJECT_ROOT_DIR ${CMAKE_CURRENT_LIST_DIR}/../)
+
+# Googletest
+set(GTEST_LIBDIR ${PROJECT_ROOT_DIR}/googletest/build/lib/)
+set(GTEST_INCDIR ${PROJECT_ROOT_DIR}/googletest/googletest/include)
+set(GMOCK_INCDIR ${PROJECT_ROOT_DIR}/googletest/googlemock/include)
+
+# Binary output 
+set(TARGET_DIR ${PROJECT_ROOT_DIR}/output)
+set(CMAKE_INSTALL_PREFIX ${TARGET_DIR})
+set(CMAKE_LIBRARY_PATH ${TARGET_DIR}/usr/lib)
+
+
+# Compiler configuration
+set(CMAKE_LINK_WHAT_YOU_USE TRUE)                                               
+set(CMAKE_CXX_STANDARD 11)                                                     
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++11 -Wall -Wextra -Werror")    
+set(CMAKE_C_FLAGS_DEBUG "-O0 -g -pg")                                     
+set(CMAKE_C_FLAGS_RELEASE "-Os")                                          
