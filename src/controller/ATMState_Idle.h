@@ -31,10 +31,9 @@
 #include "ATMStateObjectBase.h"
 #include "ATMEvents.h"
 
-class ATMState_Idle : public StateObjectBase<ATMEvents> {
+class ATMState_Idle : public ATMStateObjectBase {
 public:
-  ATMState_Idle(ATMStateMachine &sm) : 
-    ATMStateObjectBase(sm) {}
+  ATMState_Idle() {}
   ~ATMState_Idle() {}
 
   virtual bool enter(ATMEvents event);
@@ -42,4 +41,4 @@ public:
   virtual bool exit(ATMEvents event);
 };
 
-#endif _CONTROLLER_ATMSTATE_IDLE_H_
+#endif // _CONTROLLER_ATMSTATE_IDLE_H_

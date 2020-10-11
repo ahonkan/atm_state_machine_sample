@@ -31,12 +31,14 @@
 #include <unordered_map>
 #include <queue>
 #include "ATMEvents.h"
+#include "ATMStateObjectBase.h"
 
 
 class ATMStateMachine {
 public:
-  void ATMStateMachine() : current_state_(NULL) {
+  ATMStateMachine(ATMStateObjectBase &start_state) : current_state_(&start_state) {
     setup_transition_map();
+    raise_event(kPowerUp);
   }
 
   void raise_event(ATMEvents event);
@@ -45,11 +47,16 @@ public:
 protected:
   void setup_transition_map();
 
-  StateMachineBase<ATMEvents> *current_state_;
+  ATMStateObjectBase *current_state_;
 
-  typedef std::unordered_map<ATMEvents, const StateMachineBase<ATMEvents>* > EventAction;
-  typedef std::unordered_map<<const StateMachineBase<ATMEvents>*, EventAction> TransitionMap;
-  std::unordered_map StateTransition<const StateMachineBase<ATMEvents>*, EventAction> transition_map_;
+  /*
+   * Cannot use enum type in hash as there is no hashing function for enum.
+   * https://stackoverflow.com/questions/18837857/cant-use-enum-class-as-unordered-map-key
+   * Using int as type for enum for the map.
+   */ 
+  typedef std::unordered_map<int, ATMStateObjectBase* > EventAction;
+  typedef std::unordered_map<ATMStateObjectBase*, EventAction> TransitionMap;
+  TransitionMap transition_map_;
 
   std::queue<ATMEvents> event_queue_; 
 

@@ -29,11 +29,19 @@
 #define _CONTROLLER_ATMSTATEOBJECTS_H_
 
 #include "ATMStateMachine.h"
+#include "ATMState_PowerUp.h"
 #include "ATMState_Idle.h"
+#include "ATMState_SystemError.h"
+#include "ATMState_Authenticate.h"
+#include "ATMState_Transaction.h"
 
 
-extern ATMStateMachine gAtmStateMachine;
+extern ATMState_PowerUp gAtmState_PowerUp;
 extern ATMState_Idle gAtmState_Idle;
 extern ATMState_SystemError gAtmState_SystemError;
+extern ATMState_Authenticate gAtmState_Authenticate;
+extern ATMState_Transaction gAtmState_Transaction;
+
+extern ATMStateMachine gAtmStateMachine;
 
 #endif // _CONTROLLER_ATMSTATEOBJECTS_H_

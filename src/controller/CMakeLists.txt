@@ -19,6 +19,14 @@ set(LIB_DIRS
 )
 
 set(SRCS
+  ATMState_Authenticate.cc
+  ATMState_Idle.cc
+  ATMStateMachine.cc
+  ATMStateMachine_transitions.cc
+  ATMStateObjects.cc
+  ATMState_PowerUp.cc
+  ATMState_SystemError.cc
+  ATMState_Transaction.cc
   controller.cc
 )
 

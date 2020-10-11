@@ -29,6 +29,10 @@
 #include "ATMStateObjects.h"
 
 
-ATMStateMachine gAtmStateMachine;
-ATMState_Idle gAtmState_Idle(gAtmStateMachine);
+ATMState_PowerUp gAtmState_PowerUp;
+ATMState_Idle gAtmState_Idle;
+ATMState_SystemError gAtmState_SystemError;
+ATMState_Authenticate gAtmState_Authenticate;
+ATMState_Transaction gAtmState_Transaction;
 
+ATMStateMachine gAtmStateMachine(gAtmState_PowerUp);

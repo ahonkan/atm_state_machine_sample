@@ -36,8 +36,6 @@ public:
   virtual bool enter(T event) = 0;
   virtual bool run_loop(T event) = 0;
   virtual bool exit(T event) = 0;
-  virtual StateObjectBase() = 0;
-  virtual ~StateObjectBase() = 0;
 };
 
 #endif // _CONTROLLER_STATEOBJECTBASE_H_

@@ -32,12 +32,12 @@
 #define CRITICAL_SECTION()
 
 
-ATMStateMachine::raise_event(ATMEvents event) {
+void ATMStateMachine::raise_event(ATMEvents event) {
   CRITICAL_SECTION();
   event_queue_.push(event);
 }
 
-ATMStateMachine::execute() {
+void ATMStateMachine::execute() {
 
   /* 
    * Loop through all queued events and execute the state object run function
@@ -50,16 +50,16 @@ ATMStateMachine::execute() {
     ATMEvents event = event_queue_.front();
     event_queue_.pop();
 
-    current_state->run_loop(event);
+    current_state_->run_loop(event);
 
     TransitionMap::iterator current_state_it = transition_map_.find(current_state_);
     
     if (current_state_it == transition_map_.end()) {
       // Handle error for undefined state
     } else {
-      EventAction::iterator event_action_it = current_state_it->find(event);
+      EventAction::iterator event_action_it = current_state_it->second.find(event);
 
-      if (event_action_it == current_state_it->end()) {
+      if (event_action_it == current_state_it->second.end()) {
         continue;
       } 
       
@@ -70,10 +70,10 @@ ATMStateMachine::execute() {
        * Clearing the event queue is important for state transition as we don't
        * want to act on stale events.
        */ 
-      if (current_state_->exit() && event_action_it->enter()) {
-        event_queue_.clear();
-        current_state_ = event_action_it;
-        current_state->run_loop(event);
+      if (current_state_->exit(event) && event_action_it->second->enter(event)) {
+        while (!event_queue_.empty()) event_queue_.pop();
+        current_state_ = event_action_it->second;
+        current_state_->run_loop(event);
       }
 
     }

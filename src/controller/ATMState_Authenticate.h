@@ -25,21 +25,20 @@
  * For more information, please refer to <https://unlicense.org>
  *
  */
-#ifndef _CONTROLLER_ATMSTATEOBJECTBASE_H_
-#define _CONTROLLER_ATMSTATEOBJECTBASE_H_
+#ifndef _CONTROLLER_ATMSTATE_AUTHENTICATE_H_
+#define _CONTROLLER_ATMSTATE_AUTHENTICATE_H_
 
-#include "StateObjectBase.h"
+#include "ATMStateObjectBase.h"
 #include "ATMEvents.h"
 
-class ATMStateObjectBase : public StateObjectBase<ATMEvents> {
+class ATMState_Authenticate : public ATMStateObjectBase {
 public:
-  ATMStateObjectBase() {}
-  ~ATMStateObjectBase() {}
+  ATMState_Authenticate() {}
+  ~ATMState_Authenticate() {}
 
-  virtual bool enter(ATMEvents event) { (void)event; return true; }
-  virtual bool run_loop(ATMEvents event) { (void)event; return true; }
-  virtual bool exit(ATMEvents event) { (void)event; return true; }
-
+  virtual bool enter(ATMEvents event);
+  virtual bool run_loop(ATMEvents event);
+  virtual bool exit(ATMEvents event);
 };
 
-#endif // _CONTROLLER_ATMSTATEOBJECTBASE_H_
+#endif // _CONTROLLER_ATMSTATE_AUTHENTICATE_H_

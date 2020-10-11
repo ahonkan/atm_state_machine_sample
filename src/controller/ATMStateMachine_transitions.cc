@@ -30,9 +30,23 @@
 #include "ATMStateObjects.h"
 
 
-ATMStateMachine::setup_transition_map() {
+void ATMStateMachine::setup_transition_map() {
+
+  transition_map_[&gAtmState_PowerUp][kSystemError] = &gAtmState_SystemError;
+  transition_map_[&gAtmState_PowerUp][kSystemReady] = &gAtmState_Idle;
 
   transition_map_[&gAtmState_Idle][kSystemError] = &gAtmState_SystemError;
+  transition_map_[&gAtmState_Idle][kCardInserted] = &gAtmState_Authenticate;
+
+  transition_map_[&gAtmState_Authenticate][kCancel] = &gAtmState_Idle;
+  transition_map_[&gAtmState_Authenticate][kPinEntryTimeout] = &gAtmState_Idle;
+  transition_map_[&gAtmState_Authenticate][kSystemError] = &gAtmState_SystemError;
+  transition_map_[&gAtmState_Authenticate][kAuthOk] = &gAtmState_Transaction;
+
+  transition_map_[&gAtmState_Transaction][kCancel] = &gAtmState_Idle;
+  transition_map_[&gAtmState_Transaction][kTransactionTimeout] = &gAtmState_Idle;
+  transition_map_[&gAtmState_Transaction][kSystemError] = &gAtmState_SystemError;
+  transition_map_[&gAtmState_Transaction][kTransactionComplete] = &gAtmState_Idle;
 
 }
 

@@ -32,25 +32,20 @@
 #include "auth/auth.h"
 #include "ATMState_Idle.h"
 
-/*
-enum ATMEvents {
-  kInvalid = 0,
-  kCardInserted,
-  kCancel,
-  kPINEntryTimeout,
-  kAuthOK,
-  kTransactionTimeout,
-  kSystemError,
-};
-*/
 
 bool ATMState_Idle::enter(ATMEvents event) {
+  (void)event;
+  return true;
 }
 
 bool ATMState_Idle::run_loop(ATMEvents event) {
+  (void)event;
+  return true;
 }
 
 bool ATMState_Idle::exit(ATMEvents event) {
+  (void)event;
+  return true;
 }
 
 

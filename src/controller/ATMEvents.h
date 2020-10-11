@@ -30,11 +30,14 @@
 
 enum ATMEvents {
   kInvalid = 0,
+  kPowerUp,
+  kSystemReady,
   kCardInserted,
   kCancel,
-  kPINEntryTimeout,
-  kAuthOK,
+  kPinEntryTimeout,
+  kAuthOk,
   kTransactionTimeout,
+  kTransactionComplete,
   kSystemError,
 };
 
