@@ -11,9 +11,11 @@ set(INCS
 )
 
 set(INC_DIRS
+  ${CMAKE_INCLUDE_PATH}
 )
 
 set(LIB_DIRS
+  ${CMAKE_LIBRARY_PATH}
 )
 
 set(SRCS

@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.10)
-set(TARGET_NAME auth)
+set(TARGET_NAME user_info)
 project(${TARGET_NAME} VERSION 1.0.0 LANGUAGES CXX)
 
 #

@@ -25,56 +25,33 @@
  * For more information, please refer to <https://unlicense.org>
  *
  */
-#include <stdio.h>
-
-#include "hal/atm_hal.h"
-#include "user_info/user_info.h"
-#include "auth/auth.h"
+#ifndef _CONTROLLER_ATMSTATEMACHINE_H_
+#define _CONTROLLER_ATMSTATEMACHINE_H_
 
 #include <unordered_map>
+#include <queue>
+#include "ATMEvents.h"
 
-enum ATMEvents {
-  kInvalid = 0,
-  kCardInserted,
-  kCancel,
-  kPINEntryTimeout,
-  kAuthOK,
-  kTransactionTimeout,
-  kSystemError,
-};
 
-template <typename T>
-class StateMachineBase {
+class ATMStateMachine {
 public:
-  virtual bool enter(T event) = 0;
-  virtual bool run_loop(T event) = 0;
-  virtual bool exit(T event) = 0;
-  virtual StateMachineBase() = 0;
-  virtual ~StateMachineBase() = 0;
+  void ATMStateMachine() : current_state_(NULL) {
+    setup_transition_map();
+  }
+
+  void raise_event(ATMEvents event);
+  void execute();
+
+protected:
+  void setup_transition_map();
+
+  StateMachineBase<ATMEvents> *current_state_;
+
+  typedef std::unordered_map<ATMEvents, const StateMachineBase<ATMEvents>* > EventAction;
+  typedef std::unordered_map<<const StateMachineBase<ATMEvents>*, EventAction> TransitionMap;
+  std::unordered_map StateTransition<const StateMachineBase<ATMEvents>*, EventAction> transition_map_;
+
+  std::queue<ATMEvents> event_queue_; 
+
 };
-
-class ATMState_Idle : public StateMachineBase<ATMEvents> {
-public:
-  ATMState_Idle() {}
-  ~ATMState_Idle() {}
-
-  virtual bool enter(ATMEvents event);
-  virtual bool run_loop(ATMEvents event);
-  virtual bool exit(ATMEvents event);
-};
-
-
-
-
-typedef std::unordered_map<ATMEvents, const StateMachineBase<ATMEvents>& > EventAction;
-std::unordered_map StateTransition<const StateMachineBase<ATMEvents>&, EventAction> ATMStateTransitions;
-
-
-
-
-
-
-int main(void) {
-  printf("Hello world\n");
-  return 0;
-}
+#endif // _CONTROLLER_ATMSTATEMACHINE_H_

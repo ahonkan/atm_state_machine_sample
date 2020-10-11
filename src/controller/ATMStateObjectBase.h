@@ -25,56 +25,26 @@
  * For more information, please refer to <https://unlicense.org>
  *
  */
-#include <stdio.h>
+#ifndef _CONTROLLER_ATMSTATEOBJECTBASE_H_
+#define _CONTROLLER_ATMSTATEOBJECTBASE_H_
 
-#include "hal/atm_hal.h"
-#include "user_info/user_info.h"
-#include "auth/auth.h"
+#include "StateObjectBase.h"
+#include "ATMEvents.h"
+#include "ATMStateMachine.h"
 
-#include <unordered_map>
-
-enum ATMEvents {
-  kInvalid = 0,
-  kCardInserted,
-  kCancel,
-  kPINEntryTimeout,
-  kAuthOK,
-  kTransactionTimeout,
-  kSystemError,
-};
-
-template <typename T>
-class StateMachineBase {
+class ATMStateObjectBase : public StateObjectBase<ATMEvents> {
 public:
-  virtual bool enter(T event) = 0;
-  virtual bool run_loop(T event) = 0;
-  virtual bool exit(T event) = 0;
-  virtual StateMachineBase() = 0;
-  virtual ~StateMachineBase() = 0;
+  ATMStateObjectBase(ATMStateMachine &sm) : state_machine_(&sm) {}
+  ~ATMStateObjectBase() {}
+
+  virtual bool enter(ATMEvents event) {}
+  virtual bool run_loop(ATMEvents event) {}
+  virtual bool exit(ATMEvents event) {}
+
+protected:
+
+  ATMStateMachine *state_machine_
+
 };
 
-class ATMState_Idle : public StateMachineBase<ATMEvents> {
-public:
-  ATMState_Idle() {}
-  ~ATMState_Idle() {}
-
-  virtual bool enter(ATMEvents event);
-  virtual bool run_loop(ATMEvents event);
-  virtual bool exit(ATMEvents event);
-};
-
-
-
-
-typedef std::unordered_map<ATMEvents, const StateMachineBase<ATMEvents>& > EventAction;
-std::unordered_map StateTransition<const StateMachineBase<ATMEvents>&, EventAction> ATMStateTransitions;
-
-
-
-
-
-
-int main(void) {
-  printf("Hello world\n");
-  return 0;
-}
+#endif // _CONTROLLER_ATMSTATEOBJECTBASE_H_

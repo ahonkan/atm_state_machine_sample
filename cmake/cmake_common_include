@@ -9,6 +9,7 @@ set(GMOCK_INCDIR ${PROJECT_ROOT_DIR}/googletest/googlemock/include)
 set(TARGET_DIR ${PROJECT_ROOT_DIR}/output)
 set(CMAKE_INSTALL_PREFIX ${TARGET_DIR})
 set(CMAKE_LIBRARY_PATH ${TARGET_DIR}/usr/lib)
+set(CMAKE_INCLUDE_PATH ${TARGET_DIR}/usr/include)
 
 
 # Compiler configuration
