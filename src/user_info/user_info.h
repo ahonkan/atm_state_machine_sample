@@ -25,71 +25,52 @@
  * For more information, please refer to <https://unlicense.org>
  *
  */
-#ifndef _HAL_ATM_HAL_H
-#define _HAL_ATM_HAL_H
+#ifndef _USER_INFO_USER_INFO_H_
+#define _USER_INFO_USER_INFO_H_
 
+#include <string>
 #include <vector>
 #include <stdint.h>
 
-namespace atm_hal {
+#include "auth/auth.h"
 
-//-----------------------------------------------------------------------------
-// ATM Card API
-namespace card {
-enum Status {
-  kOk = 0,
-  kReadError,
-  kJammed
+class UserInfo {
+
+public:
+  
+  enum Status {
+    kOk = 0,
+    kAuthTokenFail,
+    kServerFail,
+  };
+  
+  enum AcctType {
+    kInvalid = 0,
+    kChecking,
+    kSavings
+  };
+
+  struct AcctInfo {
+    AcctType    type;
+    std::string acct_number;
+    int         balance;
+  };
+
+  const UserInfo &instance(void) {
+    static UserInfo instance;
+    return instance;
+  }
+
+  Status open_session(const Auth &auth); 
+  Status get_acct_info(std::vector<AcctInfo> *acct_info);
+  Status deposit(int val);
+  Status withdraw(int val);
+  Status close_session(std::vector<uint8_t> *blob);  
+
+protected:
+  UserInfo() {} 
+
+  const Auth *auth_;
 };
 
-Status is_inserted(bool *state);
-Status eject(void);
-Status get_data_blob(std::vector<uint8_t> *data);
-Status set_data_blob(const std::vector<uint8_t> &data);
-} // namespace card
-
-//-----------------------------------------------------------------------------
-// ATM Cash Dispenser API
-namespace dispenser {
-
-enum Status {
-  kOk,
-  kEmpty,
-  kJammed,
-};
-
-enum CashValue {
-  k1 = 0,
-  k2,
-  k5,
-  k10,
-  k20,
-  k50,
-  k100,
-  kEnd,
-};
-
-Status get_available_cash(std::vector<int> *cash_quantity);
-Status dispense_cash(int denomination, int count);
-} // namespace dispenser
-
-
-
-//-----------------------------------------------------------------------------
-// ATM Deposit API
-namespace deposit {
-
-enum Status {
-  kOk,
-  kFull,
-  kJammed,
-};
-
-Status is_full(bool *state);
-Status deposit_items(void);
-} // namespace deposit
-
-
-} // namespace atm_hal
-
-#endif  /* _HAL_ATM_HAL_H */
+#endif  /* _USER_INFO_USER_INFO_H_ */

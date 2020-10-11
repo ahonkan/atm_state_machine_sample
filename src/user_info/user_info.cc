@@ -25,71 +25,40 @@
  * For more information, please refer to <https://unlicense.org>
  *
  */
-#ifndef _HAL_ATM_HAL_H
-#define _HAL_ATM_HAL_H
 
-#include <vector>
-#include <stdint.h>
-
-namespace atm_hal {
-
-//-----------------------------------------------------------------------------
-// ATM Card API
-namespace card {
-enum Status {
-  kOk = 0,
-  kReadError,
-  kJammed
-};
-
-Status is_inserted(bool *state);
-Status eject(void);
-Status get_data_blob(std::vector<uint8_t> *data);
-Status set_data_blob(const std::vector<uint8_t> &data);
-} // namespace card
-
-//-----------------------------------------------------------------------------
-// ATM Cash Dispenser API
-namespace dispenser {
-
-enum Status {
-  kOk,
-  kEmpty,
-  kJammed,
-};
-
-enum CashValue {
-  k1 = 0,
-  k2,
-  k5,
-  k10,
-  k20,
-  k50,
-  k100,
-  kEnd,
-};
-
-Status get_available_cash(std::vector<int> *cash_quantity);
-Status dispense_cash(int denomination, int count);
-} // namespace dispenser
+#include "user_info.h"
 
 
+UserInfo::Status UserInfo::open_session(const Auth &auth) {
+  auth_ = &auth;
+  return UserInfo::Status::kOk;
+}
 
-//-----------------------------------------------------------------------------
-// ATM Deposit API
-namespace deposit {
+UserInfo::Status UserInfo::get_acct_info(std::vector<AcctInfo> *acct_info) {
+  AcctInfo info;
 
-enum Status {
-  kOk,
-  kFull,
-  kJammed,
-};
+  acct_info->clear();
 
-Status is_full(bool *state);
-Status deposit_items(void);
-} // namespace deposit
+  info.type = kChecking;
+  info.acct_number = "12345678";
+  info.balance = 123;
 
+  acct_info->push_back(info);  
+  
+  return UserInfo::Status::kOk;
+}
 
-} // namespace atm_hal
+UserInfo::Status UserInfo::deposit(int val) { 
+  (void)val;
+  return UserInfo::Status::kOk;
+}
 
-#endif  /* _HAL_ATM_HAL_H */
+UserInfo::Status UserInfo::withdraw(int val) {
+  (void)val;
+  return UserInfo::Status::kOk;
+}
+
+UserInfo::Status UserInfo::close_session(std::vector<uint8_t> *blob) {
+  (void)blob;
+  return UserInfo::Status::kOk;
+} 

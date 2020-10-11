@@ -50,6 +50,11 @@ Status get_data_blob(std::vector<uint8_t> *data) {
   return kOk;
 }
 
+Status set_data_blob(const std::vector<uint8_t> &data) {
+  (void)data;
+  return kOk;
+}
+
 } // namespace card
 
 //-----------------------------------------------------------------------------

@@ -25,71 +25,23 @@
  * For more information, please refer to <https://unlicense.org>
  *
  */
-#ifndef _HAL_ATM_HAL_H
-#define _HAL_ATM_HAL_H
 
-#include <vector>
-#include <stdint.h>
+#include "auth.h"
 
-namespace atm_hal {
+Auth::Status create_session() {
+  return Auth::Status::kOk;
+}
 
-//-----------------------------------------------------------------------------
-// ATM Card API
-namespace card {
-enum Status {
-  kOk = 0,
-  kReadError,
-  kJammed
-};
-
-Status is_inserted(bool *state);
-Status eject(void);
-Status get_data_blob(std::vector<uint8_t> *data);
-Status set_data_blob(const std::vector<uint8_t> &data);
-} // namespace card
-
-//-----------------------------------------------------------------------------
-// ATM Cash Dispenser API
-namespace dispenser {
-
-enum Status {
-  kOk,
-  kEmpty,
-  kJammed,
-};
-
-enum CashValue {
-  k1 = 0,
-  k2,
-  k5,
-  k10,
-  k20,
-  k50,
-  k100,
-  kEnd,
-};
-
-Status get_available_cash(std::vector<int> *cash_quantity);
-Status dispense_cash(int denomination, int count);
-} // namespace dispenser
+Auth::Status destroy_session() {
+  return Auth::Status::kOk;
+}
 
 
+Auth::Auth(const std::string &pin, const std::vector<uint8_t> &blob) {
+  (void)pin;
+  (void)blob;
+  token_.assign("abcde");
+}
 
-//-----------------------------------------------------------------------------
-// ATM Deposit API
-namespace deposit {
-
-enum Status {
-  kOk,
-  kFull,
-  kJammed,
-};
-
-Status is_full(bool *state);
-Status deposit_items(void);
-} // namespace deposit
-
-
-} // namespace atm_hal
-
-#endif  /* _HAL_ATM_HAL_H */
+Auth::~Auth() {
+}
