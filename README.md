@@ -4,9 +4,9 @@ This sample project demonstrates cmake build environment & gtest test environmen
 
 
 ## Code Layout
-src/  : Path for all the source code
-test/ : Pathf for all the test code
-build/ : cmake build location to build the application
+  - src/  : Path for all the source code
+  - test/ : Pathf for all the test code
+  - build/ : cmake build location to build the application
 
 The src/ path contains following directories:
   - hal/   : library for hardware abstraction layer
