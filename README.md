@@ -21,10 +21,10 @@ Before running test code, first run setup_gtest.sh to clone and install the gtes
 
 ### Building the controller tests
 
-1: cd to test/controller/build
-2: enter:  cmake ..
-3: enter:  make all
-4: run the test
+  - 1: cd to test/controller/build
+  - 2: enter:  cmake ..
+  - 3: enter:  make all
+  - 4: run the test
 
 TODO: Currently the test fails
 
