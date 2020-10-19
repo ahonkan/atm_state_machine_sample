@@ -30,11 +30,14 @@
 #include "ATMStateMachine.h"
 
 #define CRITICAL_SECTION()
-
+#ifndef LOG_PRINT
+#define LOG_PRINT(...)  do { printf("%s:%s:%d ", __FILE__, __func__, __LINE__); printf(__VA_ARGS__); } while(0) 
+#endif
 
 void ATMStateMachine::raise_event(ATMEvents event) {
   CRITICAL_SECTION();
   event_queue_.push(event);
+  LOG_PRINT("raising event: %d\n", event);
 }
 
 void ATMStateMachine::execute() {
@@ -50,19 +53,26 @@ void ATMStateMachine::execute() {
     ATMEvents event = event_queue_.front();
     event_queue_.pop();
 
+    LOG_PRINT("executing event: %d\n", event);
+
     current_state_->run_loop(event);
 
     TransitionMap::iterator current_state_it = transition_map_.find(current_state_);
     
     if (current_state_it == transition_map_.end()) {
       // Handle error for undefined state
+      LOG_PRINT("Error: Transitioning to undefined state\n");
     } else {
       EventAction::iterator event_action_it = current_state_it->second.find(event);
 
       if (event_action_it == current_state_it->second.end()) {
+        LOG_PRINT("event not triggering state transition: %d\n", event);
         continue;
       } 
       
+      LOG_PRINT("Potential triggering state transition: %d "
+          " from: %p to %p\n", event, current_state_, event_action_it->second);
+
       /*
        * State transition behavior here is to only switch states if 
        * we are successful in current state exit and new state entry operations.
@@ -70,12 +80,23 @@ void ATMStateMachine::execute() {
        * Clearing the event queue is important for state transition as we don't
        * want to act on stale events.
        */ 
-      if (current_state_->exit(event) && event_action_it->second->enter(event)) {
-        while (!event_queue_.empty()) event_queue_.pop();
-        current_state_ = event_action_it->second;
-        current_state_->run_loop(event);
-      }
+      bool exit_status = current_state_->exit(event);
+      LOG_PRINT("Exit Status: %d\n", exit_status);  
 
+      if (exit_status) {
+        bool enter_status = event_action_it->second->enter(event);
+        LOG_PRINT("Enter Status: %d\n", enter_status);  
+
+        if (enter_status) {
+          while (!event_queue_.empty()) event_queue_.pop();
+          current_state_ = event_action_it->second;
+          current_state_->run_loop(event);
+        } else {
+          LOG_PRINT("Not transitioning due to fail entry status\n");
+        }
+      } else {
+        LOG_PRINT("Not transitioning due to fail exit status\n");
+      }
     }
   }
 }

@@ -28,16 +28,22 @@
 #ifndef _CONTROLLER_ATMSTATEMACHINE_H_
 #define _CONTROLLER_ATMSTATEMACHINE_H_
 
+#include <stdio.h>
 #include <unordered_map>
 #include <queue>
 #include "ATMEvents.h"
 #include "ATMStateObjectBase.h"
 
+#ifndef LOG_PRINT
+#define LOG_PRINT(...)  do { printf("%s:%s:%d ", __FILE__, __func__, __LINE__); printf(__VA_ARGS__); } while(0) 
+#endif
 
 class ATMStateMachine {
 public:
   ATMStateMachine(ATMStateObjectBase &start_state) : current_state_(&start_state) {
+    LOG_PRINT("Setting up transition map\n");
     setup_transition_map();
+    LOG_PRINT("Raising Event\n");
     raise_event(kPowerUp);
   }
 
